@@ -22,12 +22,13 @@ public class Patient {
     private String lastName;
     private String dateOfBirth;
     private String telephoneNumber;
+    private String patientCode;
 
-    public Patient(String firstName, String lastName, String dateOfBirth, String telephoneNumber) {
+    public Patient(String firstName, String lastName, String dateOfBirth, String telephoneNumber, String patientCode) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.telephoneNumber = telephoneNumber;
+        this.patientCode = patientCode;
     }
-
 }

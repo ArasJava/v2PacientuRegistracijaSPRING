@@ -2,43 +2,54 @@ package net.dermatologas.pacienturegistracija.Controller;
 
 import net.dermatologas.pacienturegistracija.Model.Registration;
 import net.dermatologas.pacienturegistracija.Repository.RegistrationRepository;
-import net.dermatologas.pacienturegistracija.ResourceNotFoundException;
+import net.dermatologas.pacienturegistracija.Exception.ResourceNotFoundException;
+import net.dermatologas.pacienturegistracija.Service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/registration")
 public class RegistrationController {
-    @Autowired
-    public RegistrationRepository registrationRepository;
-    @GetMapping("/registrations")
-    public List<Registration> getAllSpecialists(){
-        return registrationRepository.findAll();
+
+    public RegistrationService registrationService;
+
+    public RegistrationController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
     }
-    @GetMapping("/registrations/{id}")
-    public ResponseEntity<Registration> getSpecialistById(@PathVariable Long id) {
-        Registration registration = registrationRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Registracijos nėra su tokiu id " + id));
-        return ResponseEntity.ok(registration);
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Registration>> getAllRegistrations(){
+        List<Registration> registrations = registrationService.findAllRegistrations();
+        return new ResponseEntity<>(registrations, HttpStatus.OK);
     }
-    @PostMapping("/registrations")
-    public Registration createSpecialist(@RequestBody Registration registration){
-        return registrationRepository.save(registration);
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Registration> getRegistrationById(@PathVariable("id") Long id) {
+        Registration registration = registrationService.findRegistrationByID(id);
+        return new ResponseEntity(registration, HttpStatus.OK);
     }
-    @PutMapping("/registrations/{id}")
-    public ResponseEntity<Registration> updateSpecialist(@PathVariable Long id, @RequestBody Registration registrationDetails){
-        Registration registration = registrationRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("Specialisto nėra su tokiu id " + id));
-        registration.setPatientId(registrationDetails.getPatientId());
-        registration.setDoctorID(registrationDetails.getDoctorID());
-        registration.setDate(registrationDetails.getDate());
-        registration.setTime(registrationDetails.getTime());
-        registration.setPurpose(registrationDetails.getPurpose());
-        registration.setMessage(registrationDetails.getMessage());
-        Registration updatedRegistration = registrationRepository.save(registration);
-        return ResponseEntity.ok(updatedRegistration);
+
+    @PostMapping("/add")
+    public ResponseEntity<Registration> addRegistration(@RequestBody Registration registration){
+        Registration newRegistration = registrationService.addRegistration(registration);
+        return new ResponseEntity<>(newRegistration, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Registration> updateRegistration(@RequestBody Registration registration){
+        Registration updateRegistration = registrationService.updateRegistration(registration);
+        return new ResponseEntity<>(updateRegistration, HttpStatus.OK);
+    }
+
+    @Transactional
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteRegistration(@PathVariable ("id") Long id){
+        registrationService.deleteRegistration(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

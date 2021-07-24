@@ -2,9 +2,12 @@ package net.dermatologas.pacienturegistracija.Controller;
 
 import net.dermatologas.pacienturegistracija.Model.Patient;
 import net.dermatologas.pacienturegistracija.Repository.PatientRepository;
-import net.dermatologas.pacienturegistracija.ResourceNotFoundException;
+import net.dermatologas.pacienturegistracija.Exception.ResourceNotFoundException;
+import net.dermatologas.pacienturegistracija.Service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,48 +15,42 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/patient")
 public class PatientController {
-    @Autowired
-    private PatientRepository patientRepository;
 
-    @GetMapping("/patients")
-    public List<Patient> getAllPatients() {
-        return patientRepository.findAll();
+    private final PatientService patientService;
+
+    public PatientController(PatientService patientService) {
+        this.patientService = patientService;
     }
 
-    @GetMapping("/patients/{id}")
-    public ResponseEntity<Patient> getPatientById(@PathVariable Long id) {
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Paciento nėra su tokiu id " + id));
-        return ResponseEntity.ok(patient);
+    @GetMapping("/all")
+    public ResponseEntity<List<Patient>> getAllPatients(){
+        List<Patient> patients = patientService.findAllPatients();
+        return new ResponseEntity<>(patients, HttpStatus.OK);
     }
 
-    @PostMapping("/patients")
-    public Patient createPatient(@RequestBody Patient patient) {
-        return patientRepository.save(patient);
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Patient> getPatientById (@PathVariable("id") Long id) {
+        Patient patient = patientService.findPatientById(id);
+        return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 
-    @PutMapping("/patients/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient patientDetails) {
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Paciento nėra su tokiu id " + id));
-
-        patient.setFirstName(patientDetails.getFirstName());
-        patient.setLastName(patientDetails.getLastName());
-        patient.setDateOfBirth(patientDetails.getDateOfBirth());
-        patient.setTelephoneNumber(patientDetails.getTelephoneNumber());
-        Patient updatedPatient = patientRepository.save(patient);
-        return ResponseEntity.ok(updatedPatient);
+    @PostMapping("/add")
+    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) {
+        Patient newPacient = patientService.addPatient(patient);
+        return new ResponseEntity<>(newPacient,HttpStatus.CREATED);
     }
-    @DeleteMapping("/patients/{id}")
-    public Map<String,Boolean> deletePatient(@PathVariable Long id){
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Paciento nėra su tokiu id " + id));
 
-        patientRepository.delete(patient);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return (Map<String, Boolean>) ResponseEntity.ok();
+    @PutMapping("/update")
+    public ResponseEntity<Patient> updatePatient(@RequestBody Patient patient) {
+        Patient updatedPatient = patientService.updatePatient(patient);
+        return new ResponseEntity<>(updatedPatient, HttpStatus.OK);
+    }
+    @Transactional
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deletePatient(@PathVariable ("id") Long id){
+        patientService.deletePatient(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

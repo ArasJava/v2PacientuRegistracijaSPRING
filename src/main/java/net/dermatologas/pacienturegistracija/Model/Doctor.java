@@ -20,9 +20,11 @@ public class Doctor {
     private long id;
     private String doctorFirstName;
     private String doctorLastName;
+    private String doctorCode;
 
-    public Doctor(String doctorFirstName, String doctorLastName) {
+    public Doctor(String doctorFirstName, String doctorLastName, String doctorCode) {
         this.doctorFirstName = doctorFirstName;
         this.doctorLastName = doctorLastName;
+        this.doctorCode = doctorCode;
     }
 }

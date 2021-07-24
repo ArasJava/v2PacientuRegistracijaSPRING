@@ -24,13 +24,15 @@ public class Registration {
     private String time;
     private String purpose;
     private String message;
+    private String registrationCode;
 
-    public Registration(long patientId, long doctorID, String date, String time, String purpose, String message) {
+    public Registration(long patientId, long doctorID, String date, String time, String purpose, String message, String registrationCode) {
         this.patientId = patientId;
         this.doctorID = doctorID;
         this.date = date;
         this.time = time;
         this.purpose = purpose;
         this.message = message;
+        this.registrationCode = registrationCode;
     }
 }
