@@ -18,13 +18,13 @@ public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String doctorFirstName;
-    private String doctorLastName;
+    private String doctorName;
+    private String doctorSpecialization;
     private String doctorCode;
 
-    public Doctor(String doctorFirstName, String doctorLastName, String doctorCode) {
-        this.doctorFirstName = doctorFirstName;
-        this.doctorLastName = doctorLastName;
+    public Doctor(String doctorName, String doctorSpecialization, String doctorCode) {
+        this.doctorName = doctorName;
+        this.doctorSpecialization = doctorSpecialization;
         this.doctorCode = doctorCode;
     }
 }
