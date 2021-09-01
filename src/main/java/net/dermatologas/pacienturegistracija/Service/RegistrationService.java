@@ -21,7 +21,7 @@ public class RegistrationService {
     }
 
     public Registration addRegistration(Registration registration) {
-        registration.setRegistrationCode(UUID.randomUUID().toString());
+//        registration.setRegistrationCode(UUID.randomUUID().toString());
         return registrationRepository.save(registration);
     }
 

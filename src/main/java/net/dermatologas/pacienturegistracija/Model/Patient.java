@@ -5,15 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +21,10 @@ public class Patient {
     private String lastName;
     private String dateOfBirth;
     private String telephoneNumber;
-    private String patientCode;
+//    private String patientCode;
+//    @OneToOne
+//    @JoinColumn(name = "reg_id")
+//    private Registration registration;
 
-    public Patient(String firstName, String lastName, String dateOfBirth, String telephoneNumber, String patientCode) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-        this.telephoneNumber = telephoneNumber;
-        this.patientCode = patientCode;
-    }
+
 }

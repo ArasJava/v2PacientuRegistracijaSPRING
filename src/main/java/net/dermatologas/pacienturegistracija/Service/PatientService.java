@@ -19,7 +19,7 @@ public class PatientService {
     }
 
     public Patient addPatient(Patient patient) {
-        patient.setPatientCode(UUID.randomUUID().toString());
+//        patient.setPatientCode(UUID.randomUUID().toString());
         return patientRepository.save(patient);
     }
 

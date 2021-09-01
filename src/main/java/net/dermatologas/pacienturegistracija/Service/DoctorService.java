@@ -21,7 +21,7 @@ public class DoctorService {
     }
 
     public Doctor addDoctor(Doctor doctor) {
-        doctor.setDoctorCode(UUID.randomUUID().toString());
+//        doctor.setDoctorCode(UUID.randomUUID().toString());
         return doctorRepository.save(doctor);
     }
 
