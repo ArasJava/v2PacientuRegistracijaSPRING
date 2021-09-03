@@ -23,6 +23,7 @@ public class Doctor {
     private String doctorSurname;
     private String doctorSpecialization;
 //    private String doctorCode;
+
 //    @OneToOne
 //    @JoinColumn(name = "patient_id")
 //    private Patient patient;
@@ -31,11 +32,12 @@ public class Doctor {
 //    @JoinColumn(name = "registration_id",referencedColumnName = "id")
 //    private Registration registration;
 
-//    @OneToMany (
-//            mappedBy = "registration",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-//    private List<Registration> registrationList = new ArrayList<>();
+    @OneToMany (
+//            mappedBy = "doctor",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn (name = "doctor_id")
+    private List<Registration> registrations;
 
 }

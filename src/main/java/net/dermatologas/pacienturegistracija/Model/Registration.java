@@ -19,12 +19,12 @@ public class Registration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-//    private long patientId;
+    private long doctor_id;
     private String date;
     private String time;
     private String purpose;
     private String message;
-//    private String registrationCode;
+
 
 //    @ManyToOne
 //    @JoinColumn(name = "registration_id")
